@@ -7,22 +7,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.ssh.insert_key = false
 
     ##########################
-    ## Server          #######
-    ##########################
-    (1..2).each do |id|
-      srv_name  = ( "srv" + id.to_s ).to_sym
-
-      config.vm.define srv_name do |srv|
-        srv.vm.box = "robwc/minitrusty64"
-        srv.vm.hostname = "server#{id}"
-        srv.vm.network 'private_network', ip: "10.10.#{id}.2", virtualbox__intnet: "server_vqfx#{id}"
-        srv.ssh.insert_key = true
-        srv.vm.provision "shell",
-        inline: "sudo route add -net 10.10.0.0 netmask 255.255.0.0 gw 10.10.#{id}.1"
-        end
-    end
-
-    ##########################
     ## Routing Engine  #######
     ##########################
     # topology: https://www.juniper.net/documentation/en_US/junos/topics/topic-map/bgp-local-preference.html
@@ -82,6 +66,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       # Dataplane ports (em5)
       vqfx.vm.network 'private_network', auto_config: false, nic_type: '82540EM', virtualbox__intnet: 'server_vqfx2'
+    end
+
+    ##########################
+    ## Server          #######
+    ##########################
+    (1..2).each do |id|
+      srv_name  = ( "srv" + id.to_s ).to_sym
+
+      config.vm.define srv_name do |srv|
+        srv.vm.box = "robwc/minitrusty64"
+        srv.vm.hostname = "server#{id}"
+        srv.vm.network 'private_network', ip: "10.10.#{id}.2", virtualbox__intnet: "server_vqfx#{id}"
+        srv.ssh.insert_key = true
+        srv.vm.provision "shell",
+        inline: "sudo route add -net 10.10.0.0 netmask 255.255.0.0 gw 10.10.#{id}.1"
+        end
     end
 
     ##############################
