@@ -81,37 +81,6 @@ vlans {
     }
 }
 
-interfaces {
-{% for neighbor in underlay.neighbors %}
-    {{ neighbor.interface }} {
-        unit 0 {
-            description "to {{ neighbor.name }}";
-            family inet {
-                address {{ neighbor.local_ip }}/30;
-            }
-        }
-    }
-{% endfor %}
-}
-protocols {
-    bgp {
-        log-updown;
-        group underlay {
-            import bgp-clos-in;
-            export bgp-clos-out;
-            type external;
-            mtu-discovery;
-            local-as {{ underlay.local.asn }};
-            multipath multiple-as;
-{% for neighbor in underlay.neighbors %}
-            neighbor {{ neighbor.peer_ip }} {
-                peer-as {{ neighbor.asn }};
-            }
-{% endfor %}
-        }
-    }
-}
-
 routing-options {
     router-id {{ host.loopback.ip }};
     forwarding-table {
