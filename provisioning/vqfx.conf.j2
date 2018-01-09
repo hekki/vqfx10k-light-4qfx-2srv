@@ -48,6 +48,7 @@ system {
 interfaces {
 {% for interface in interfaces %}
     {{ interface.name }} {
+    description {{ interface.description }}
         unit 0 {
             family inet {
                 address {{ interface.ip }}/24;
