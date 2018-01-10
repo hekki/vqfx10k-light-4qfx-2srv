@@ -62,7 +62,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define 'vqfx4' do |vqfx|
       # (em3, em4)
       vqfx.vm.network 'private_network', auto_config: false, nic_type: '82540EM', virtualbox__intnet: 'seg3'
-      vqfx.vm.network 'private_network', auto_config: false, nic_type: '82540EM', virtualbox__intnet: 'seg6'
+      vqfx.vm.network 'private_network', auto_config: false, nic_type: '82540EM', virtualbox__intnet: 'seg4'
 
       # Dataplane ports (em5)
       vqfx.vm.network 'private_network', auto_config: false, nic_type: '82540EM', virtualbox__intnet: 'server_vqfx2'
